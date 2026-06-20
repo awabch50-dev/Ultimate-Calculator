@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NovCalc — Advanced Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- Background orbs -->
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <div class="app-wrapper">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">NovCalc</span>
+      </div>
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="standard">Standard</button>
+        <button class="mode-tab" data-mode="scientific">Scientific</button>
+        <button class="mode-tab" data-mode="currency">Currency</button>
+        <button class="mode-tab" data-mode="unit">Unit</button>
+      </div>
+    </header>
+
+    <!-- STANDARD CALCULATOR -->
+    <div class="calc-panel active" id="standard">
+      <div class="display-wrap">
+        <div class="expression" id="std-expr"></div>
+        <div class="result" id="std-result">0</div>
+        <div class="result-hint" id="std-hint"></div>
+      </div>
+      <div class="history-strip" id="std-history"></div>
+      <div class="keypad">
+        <!-- Row 1 -->
+        <button class="key key-fn" data-action="clear">AC</button>
+        <button class="key key-fn" data-action="sign">±</button>
+        <button class="key key-fn" data-action="percent">%</button>
+        <button class="key key-op" data-op="÷">÷</button>
+        <!-- Row 2 -->
+        <button class="key key-num" data-num="7">7</button>
+        <button class="key key-num" data-num="8">8</button>
+        <button class="key key-num" data-num="9">9</button>
+        <button class="key key-op" data-op="×">×</button>
+        <!-- Row 3 -->
+        <button class="key key-num" data-num="4">4</button>
+        <button class="key key-num" data-num="5">5</button>
+        <button class="key key-num" data-num="6">6</button>
+        <button class="key key-op" data-op="−">−</button>
+        <!-- Row 4 -->
+        <button class="key key-num" data-num="1">1</button>
+        <button class="key key-num" data-num="2">2</button>
+        <button class="key key-num" data-num="3">3</button>
+        <button class="key key-op" data-op="+">+</button>
+        <!-- Row 5 -->
+        <button class="key key-num key-zero" data-num="0">0</button>
+        <button class="key key-num" data-action="decimal">.</button>
+        <button class="key key-eq" data-action="equals">=</button>
+      </div>
+    </div>
+
+    <!-- SCIENTIFIC CALCULATOR -->
+    <div class="calc-panel" id="scientific">
+      <div class="display-wrap">
+        <div class="expression" id="sci-expr"></div>
+        <div class="result" id="sci-result">0</div>
+        <div class="result-hint" id="sci-hint"></div>
+      </div>
+      <div class="history-strip" id="sci-history"></div>
+      <div class="keypad keypad-sci">
+        <!-- Row 1: Function keys -->
+        <button class="key key-sci" data-sci="sin">sin</button>
+        <button class="key key-sci" data-sci="cos">cos</button>
+        <button class="key key-sci" data-sci="tan">tan</button>
+        <button class="key key-sci" data-sci="log">log</button>
+        <button class="key key-sci" data-sci="ln">ln</button>
+        <!-- Row 2 -->
+        <button class="key key-sci" data-sci="sqrt">√</button>
+        <button class="key key-sci" data-sci="sq">x²</button>
+        <button class="key key-sci" data-sci="pow">xʸ</button>
+        <button class="key key-sci" data-sci="pi">π</button>
+        <button class="key key-sci" data-sci="e">e</button>
+        <!-- Row 3 -->
+        <button class="key key-sci" data-sci="abs">|x|</button>
+        <button class="key key-sci" data-sci="inv">1/x</button>
+        <button class="key key-sci" data-sci="fact">n!</button>
+        <button class="key key-fn" data-action="clear">AC</button>
+        <button class="key key-fn" data-action="backspace">⌫</button>
+        <!-- Row 4 -->
+        <button class="key key-num" data-num="7">7</button>
+        <button class="key key-num" data-num="8">8</button>
+        <button class="key key-num" data-num="9">9</button>
+        <button class="key key-op" data-op="÷">÷</button>
+        <button class="key key-op" data-op="×">×</button>
+        <!-- Row 5 -->
+        <button class="key key-num" data-num="4">4</button>
+        <button class="key key-num" data-num="5">5</button>
+        <button class="key key-num" data-num="6">6</button>
+        <button class="key key-op" data-op="+">+</button>
+        <button class="key key-op" data-op="−">−</button>
+        <!-- Row 6 -->
+        <button class="key key-num" data-num="1">1</button>
+        <button class="key key-num" data-num="2">2</button>
+        <button class="key key-num" data-num="3">3</button>
+        <button class="key key-num" data-num="0">0</button>
+        <button class="key key-eq" data-action="equals">=</button>
+      </div>
+    </div>
+
+    <!-- CURRENCY CONVERTER -->
+    <div class="calc-panel" id="currency">
+      <div class="currency-header">
+        <h2>Currency Converter</h2>
+        <button class="refresh-btn" id="refresh-rates" title="Refresh rates">↻ Refresh</button>
+      </div>
+      <div class="rate-status" id="rate-status">Using built-in reference rates</div>
+
+      <div class="currency-box">
+        <div class="currency-row">
+          <div class="currency-select-wrap">
+            <span class="flag" id="flag-from">🇺🇸</span>
+            <select id="from-currency" class="currency-select"></select>
+          </div>
+          <input type="number" id="amount-from" class="currency-input" placeholder="0.00" value="1"/>
+        </div>
+
+        <button class="swap-btn" id="swap-currency">⇅ Swap</button>
+
+        <div class="currency-row">
+          <div class="currency-select-wrap">
+            <span class="flag" id="flag-to">🇵🇰</span>
+            <select id="to-currency" class="currency-select"></select>
+          </div>
+          <input type="number" id="amount-to" class="currency-input" placeholder="0.00" readonly/>
+        </div>
+      </div>
+
+      <div class="rate-info" id="rate-info">
+        <span id="rate-text">1 USD = 278.50 PKR</span>
+      </div>
+
+      <div class="popular-pairs">
+        <p class="pair-label">Popular Pairs</p>
+        <div class="pair-grid" id="pair-grid"></div>
+      </div>
+    </div>
+
+    <!-- UNIT CONVERTER -->
+    <div class="calc-panel" id="unit">
+      <div class="unit-header">
+        <h2>Unit Converter</h2>
+      </div>
+      <div class="unit-category-wrap">
+        <button class="unit-cat active" data-cat="length">📏 Length</button>
+        <button class="unit-cat" data-cat="weight">⚖️ Weight</button>
+        <button class="unit-cat" data-cat="temp">🌡️ Temp</button>
+        <button class="unit-cat" data-cat="area">🟦 Area</button>
+        <button class="unit-cat" data-cat="speed">🚀 Speed</button>
+        <button class="unit-cat" data-cat="data">💾 Data</button>
+      </div>
+      <div class="unit-converter-box">
+        <div class="unit-row">
+          <select id="unit-from" class="unit-select"></select>
+          <input type="number" id="unit-input-from" class="unit-input" placeholder="0" value="1"/>
+        </div>
+        <button class="swap-btn" id="swap-units">⇅ Swap</button>
+        <div class="unit-row">
+          <select id="unit-to" class="unit-select"></select>
+          <input type="number" id="unit-input-to" class="unit-input" placeholder="0" readonly/>
+        </div>
+      </div>
+      <div class="unit-formula" id="unit-formula"></div>
+    </div>
+
+  </div><!-- end app-wrapper -->
+
+  <script src="script.js"></script>
+</body>
+</html>
