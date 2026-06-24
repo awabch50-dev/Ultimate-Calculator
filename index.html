@@ -18,15 +18,21 @@
 
     <!-- Header -->
     <header class="app-header">
-      <div class="logo">
-        <span class="logo-icon">◈</span>
-        <span class="logo-text">NovCalc</span>
+      <div class="header-top">
+        <div class="logo">
+          <span class="logo-icon">◈</span>
+          <span class="logo-text">NovCalc</span>
+        </div>
+        <div class="header-controls">
+          <button class="theme-btn" id="theme-toggle" title="Toggle Theme">☀️</button>
+          <button class="lang-btn" id="lang-toggle" title="Switch Language">اردو</button>
+        </div>
       </div>
       <div class="mode-tabs">
-        <button class="mode-tab active" data-mode="standard">Standard</button>
-        <button class="mode-tab" data-mode="scientific">Scientific</button>
-        <button class="mode-tab" data-mode="currency">Currency</button>
-        <button class="mode-tab" data-mode="unit">Unit</button>
+        <button class="mode-tab active" data-mode="standard" data-i18n="tab.standard">Standard</button>
+        <button class="mode-tab" data-mode="scientific" data-i18n="tab.scientific">Scientific</button>
+        <button class="mode-tab" data-mode="currency" data-i18n="tab.currency">Currency</button>
+        <button class="mode-tab" data-mode="unit" data-i18n="tab.unit">Unit</button>
       </div>
     </header>
 
@@ -117,26 +123,38 @@
     <!-- CURRENCY CONVERTER -->
     <div class="calc-panel" id="currency">
       <div class="currency-header">
-        <h2>Currency Converter</h2>
-        <button class="refresh-btn" id="refresh-rates" title="Refresh rates">↻ Refresh</button>
+        <h2 data-i18n="currency.title">Currency Converter</h2>
+        <button class="refresh-btn" id="refresh-rates" title="Refresh rates" data-i18n="currency.refresh">↻ Refresh</button>
       </div>
-      <div class="rate-status" id="rate-status">Using built-in reference rates</div>
+      <div class="rate-status" id="rate-status" data-i18n="currency.status">Using built-in reference rates</div>
 
       <div class="currency-box">
         <div class="currency-row">
           <div class="currency-select-wrap">
             <span class="flag" id="flag-from">🇺🇸</span>
-            <select id="from-currency" class="currency-select"></select>
+            <div class="cur-dropdown" id="dd-from">
+              <button class="cur-dd-btn" type="button" id="dd-from-btn">
+                <span id="dd-from-label">USD — US Dollar</span>
+                <span class="cur-dd-chevron">▾</span>
+              </button>
+              <div class="cur-dd-panel" id="dd-from-panel"></div>
+            </div>
           </div>
           <input type="number" id="amount-from" class="currency-input" placeholder="0.00" value="1"/>
         </div>
 
-        <button class="swap-btn" id="swap-currency">⇅ Swap</button>
+        <button class="swap-btn" id="swap-currency" data-i18n="currency.swap">⇅ Swap</button>
 
         <div class="currency-row">
           <div class="currency-select-wrap">
             <span class="flag" id="flag-to">🇵🇰</span>
-            <select id="to-currency" class="currency-select"></select>
+            <div class="cur-dropdown" id="dd-to">
+              <button class="cur-dd-btn" type="button" id="dd-to-btn">
+                <span id="dd-to-label">PKR — Pakistani Rupee</span>
+                <span class="cur-dd-chevron">▾</span>
+              </button>
+              <div class="cur-dd-panel" id="dd-to-panel"></div>
+            </div>
           </div>
           <input type="number" id="amount-to" class="currency-input" placeholder="0.00" readonly/>
         </div>
@@ -147,32 +165,47 @@
       </div>
 
       <div class="popular-pairs">
-        <p class="pair-label">Popular Pairs</p>
-        <div class="pair-grid" id="pair-grid"></div>
+        <button class="pairs-toggle-btn" id="pairs-toggle" data-i18n="currency.showPairs">Show Suggested Pairs</button>
+        <div class="pairs-collapsible" id="pairs-collapsible">
+          <p class="pair-label" data-i18n="currency.popularPairs">Popular Pairs</p>
+          <div class="pair-grid" id="pair-grid"></div>
+        </div>
       </div>
     </div>
 
     <!-- UNIT CONVERTER -->
     <div class="calc-panel" id="unit">
       <div class="unit-header">
-        <h2>Unit Converter</h2>
+        <h2 data-i18n="unit.title">Unit Converter</h2>
       </div>
       <div class="unit-category-wrap">
-        <button class="unit-cat active" data-cat="length">📏 Length</button>
-        <button class="unit-cat" data-cat="weight">⚖️ Weight</button>
-        <button class="unit-cat" data-cat="temp">🌡️ Temp</button>
-        <button class="unit-cat" data-cat="area">🟦 Area</button>
-        <button class="unit-cat" data-cat="speed">🚀 Speed</button>
-        <button class="unit-cat" data-cat="data">💾 Data</button>
+        <button class="unit-cat active" data-cat="length" data-i18n="unit.length">📏 Length</button>
+        <button class="unit-cat" data-cat="weight" data-i18n="unit.weight">⚖️ Weight</button>
+        <button class="unit-cat" data-cat="temp" data-i18n="unit.temp">🌡️ Temp</button>
+        <button class="unit-cat" data-cat="area" data-i18n="unit.area">🟦 Area</button>
+        <button class="unit-cat" data-cat="speed" data-i18n="unit.speed">🚀 Speed</button>
+        <button class="unit-cat" data-cat="data" data-i18n="unit.data">💾 Data</button>
       </div>
       <div class="unit-converter-box">
         <div class="unit-row">
-          <select id="unit-from" class="unit-select"></select>
+          <div class="cur-dropdown" id="udd-from">
+            <button class="cur-dd-btn" type="button" id="udd-from-btn">
+              <span id="udd-from-label">Meter</span>
+              <span class="cur-dd-chevron">▾</span>
+            </button>
+            <div class="cur-dd-panel" id="udd-from-panel"></div>
+          </div>
           <input type="number" id="unit-input-from" class="unit-input" placeholder="0" value="1"/>
         </div>
-        <button class="swap-btn" id="swap-units">⇅ Swap</button>
+        <button class="swap-btn" id="swap-units" data-i18n="unit.swap">⇅ Swap</button>
         <div class="unit-row">
-          <select id="unit-to" class="unit-select"></select>
+          <div class="cur-dropdown" id="udd-to">
+            <button class="cur-dd-btn" type="button" id="udd-to-btn">
+              <span id="udd-to-label">Kilometer</span>
+              <span class="cur-dd-chevron">▾</span>
+            </button>
+            <div class="cur-dd-panel" id="udd-to-panel"></div>
+          </div>
           <input type="number" id="unit-input-to" class="unit-input" placeholder="0" readonly/>
         </div>
       </div>

@@ -1,0 +1,36 @@
+{
+  "lang": "ur",
+  "dir": "ltr",
+  "langLabel": "English",
+
+  "tab.standard": "اسٹینڈرڈ",
+  "tab.scientific": "سائنٹیفک",
+  "tab.currency": "کرنسی",
+  "tab.unit": "یونٹ",
+
+  "currency.title": "کرنسی کنورٹر",
+  "currency.refresh": "↻ ریفریش",
+  "currency.status": "بلٹ ان ریفرنس ریٹس استعمال ہو رہے ہیں",
+  "currency.swap": "⇅ تبدیل کریں",
+  "currency.showPairs": "تجویز کردہ جوڑے دکھائیں",
+  "currency.hidePairs": "تجویز کردہ جوڑے چھپائیں",
+  "currency.popularPairs": "مقبول جوڑے",
+  "currency.fetchingRates": "لائیو ریٹس حاصل ہو رہے ہیں...",
+  "currency.loading": "↻ لوڈ ہو رہا ہے...",
+  "currency.liveRates": "لائیو ریٹس ✓ — اپ ڈیٹ {time}",
+  "currency.liveUnavailable": "لائیو ریٹس دستیاب نہیں — ریفرنس ریٹس استعمال ہو رہے ہیں",
+
+  "unit.title": "یونٹ کنورٹر",
+  "unit.length": "📏 لمبائی",
+  "unit.weight": "⚖️ وزن",
+  "unit.temp": "🌡️ درجہ حرارت",
+  "unit.area": "🟦 رقبہ",
+  "unit.speed": "🚀 رفتار",
+  "unit.data": "💾 ڈیٹا",
+  "unit.swap": "⇅ تبدیل کریں",
+
+  "calc.divideByZero": "صفر سے تقسیم نہیں ہو سکتی",
+  "calc.mathError": "ریاضیاتی غلطی",
+  "calc.piHint": "π ≈ 3.14159...",
+  "calc.eHint": "e ≈ 2.71828..."
+}

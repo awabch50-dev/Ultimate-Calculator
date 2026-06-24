@@ -1,0 +1,36 @@
+{
+  "lang": "en",
+  "dir": "ltr",
+  "langLabel": "اردو",
+
+  "tab.standard": "Standard",
+  "tab.scientific": "Scientific",
+  "tab.currency": "Currency",
+  "tab.unit": "Unit",
+
+  "currency.title": "Currency Converter",
+  "currency.refresh": "↻ Refresh",
+  "currency.status": "Using built-in reference rates",
+  "currency.swap": "⇅ Swap",
+  "currency.showPairs": "Show Suggested Pairs",
+  "currency.hidePairs": "Hide Suggested Pairs",
+  "currency.popularPairs": "POPULAR PAIRS",
+  "currency.fetchingRates": "Fetching live rates...",
+  "currency.loading": "↻ Loading...",
+  "currency.liveRates": "Live rates ✓ — Updated {time}",
+  "currency.liveUnavailable": "Live rates unavailable — using reference rates",
+
+  "unit.title": "Unit Converter",
+  "unit.length": "📏 Length",
+  "unit.weight": "⚖️ Weight",
+  "unit.temp": "🌡️ Temp",
+  "unit.area": "🟦 Area",
+  "unit.speed": "🚀 Speed",
+  "unit.data": "💾 Data",
+  "unit.swap": "⇅ Swap",
+
+  "calc.divideByZero": "Cannot divide by zero",
+  "calc.mathError": "Math Error",
+  "calc.piHint": "π ≈ 3.14159...",
+  "calc.eHint": "e ≈ 2.71828..."
+}

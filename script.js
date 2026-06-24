@@ -5,13 +5,50 @@
 
 'use strict';
 
+/* ── i18n SYSTEM ───────────────────────────────── */
+let i18nData = {};
+let currentLang = localStorage.getItem('novCalcLang') || 'en';
+
+async function loadLanguage(lang) {
+  try {
+    const res = await fetch(`./${lang}.json`);
+    if (!res.ok) throw new Error();
+    i18nData = await res.json();
+    currentLang = lang;
+    localStorage.setItem('novCalcLang', lang);
+    applyTranslations();
+  } catch {
+    console.warn(`Failed to load ${lang}.json`);
+  }
+}
+
+function t(key) {
+  return i18nData[key] || key;
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18nData[key]) el.textContent = i18nData[key];
+  });
+  // Update lang toggle button label
+  const langBtn = document.getElementById('lang-toggle');
+  if (langBtn && i18nData.langLabel) langBtn.textContent = i18nData.langLabel;
+  // Apply RTL
+  document.documentElement.dir = i18nData.dir || 'ltr';
+  document.documentElement.lang = i18nData.lang || 'en';
+}
+
 /* ── DOM READY ─────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadLanguage(currentLang);
+  initThemeToggle();
   initModeTabs();
   initStandard();
   initScientific();
   initCurrency();
   initUnit();
+  initLangToggle();
 });
 
 /* ════════════════════════════════════════════════
@@ -117,7 +154,7 @@ function initStandard() {
       if (prevVal !== null && operator) {
         const res = operate(prevVal, operator, current);
         const e   = `${prevVal} ${operator} ${current}`;
-        if (res === 'Error') { current = 'Error'; hintEl.textContent = 'Cannot divide by zero'; }
+        if (res === 'Error') { current = 'Error'; hintEl.textContent = t('calc.divideByZero'); }
         else {
           addHistory(`${e} = ${round(res)}`);
           expr    = `${e} =`;
@@ -237,14 +274,14 @@ function initScientific() {
       case 'abs':  res = Math.abs(val);       label = `|${val}|`; break;
       case 'inv':  res = val === 0 ? 'Error' : round(1 / val); label = `1/${val}`; break;
       case 'fact': res = factorial(Math.round(val)); label = `${val}!`; break;
-      case 'pi':   current = String(Math.PI); newInput = true; updateDisplay(); hintEl.textContent = 'π ≈ 3.14159...'; return;
-      case 'e':    current = String(Math.E);  newInput = true; updateDisplay(); hintEl.textContent = 'e ≈ 2.71828...'; return;
+      case 'pi':   current = String(Math.PI); newInput = true; updateDisplay(); hintEl.textContent = t('calc.piHint'); return;
+      case 'e':    current = String(Math.E);  newInput = true; updateDisplay(); hintEl.textContent = t('calc.eHint'); return;
       case 'pow':
         prevVal = current; operator = '^'; expr = `${current}^`; newInput = true;
         updateDisplay(); return;
     }
     if (res !== undefined) {
-      if (res === 'Error') { current = 'Error'; hintEl.textContent = 'Math Error'; }
+      if (res === 'Error') { current = 'Error'; hintEl.textContent = t('calc.mathError'); }
       else { addHistory(`${label} = ${res}`); current = String(res); hintEl.textContent = `${label} = ${res}`; }
       newInput = true; updateDisplay();
     }
@@ -297,24 +334,24 @@ function initScientific() {
    4. CURRENCY CONVERTER
 ═══════════════════════════════════════════════ */
 const CURRENCIES = {
-  USD: { name:'US Dollar',       flag:'🇺🇸', rate:1       },
-  EUR: { name:'Euro',            flag:'🇪🇺', rate:0.92    },
-  GBP: { name:'British Pound',   flag:'🇬🇧', rate:0.79    },
-  PKR: { name:'Pakistani Rupee', flag:'🇵🇰', rate:278.50  },
-  INR: { name:'Indian Rupee',    flag:'🇮🇳', rate:83.12   },
-  AED: { name:'UAE Dirham',      flag:'🇦🇪', rate:3.67    },
-  SAR: { name:'Saudi Riyal',     flag:'🇸🇦', rate:3.75    },
-  JPY: { name:'Japanese Yen',    flag:'🇯🇵', rate:149.50  },
-  CNY: { name:'Chinese Yuan',    flag:'🇨🇳', rate:7.24    },
-  CAD: { name:'Canadian Dollar', flag:'🇨🇦', rate:1.36    },
-  AUD: { name:'Australian Dollar',flag:'🇦🇺',rate:1.53    },
-  CHF: { name:'Swiss Franc',     flag:'🇨🇭', rate:0.91    },
-  TRY: { name:'Turkish Lira',    flag:'🇹🇷', rate:30.80   },
-  MYR: { name:'Malaysian Ringgit',flag:'🇲🇾',rate:4.65    },
-  SGD: { name:'Singapore Dollar',flag:'🇸🇬', rate:1.34    },
-  KWD: { name:'Kuwaiti Dinar',   flag:'🇰🇼', rate:0.308   },
-  BHD: { name:'Bahraini Dinar',  flag:'🇧🇭', rate:0.376   },
-  BTC: { name:'Bitcoin',         flag:'₿',    rate:0.0000238},
+  USD: { name:'US Dollar',       flag:'🇺🇸', symbol:'$',  rate:1       },
+  EUR: { name:'Euro',            flag:'🇪🇺', symbol:'€',  rate:0.92    },
+  GBP: { name:'British Pound',   flag:'🇬🇧', symbol:'£',  rate:0.79    },
+  PKR: { name:'Pakistani Rupee', flag:'🇵🇰', symbol:'₨', rate:278.50  },
+  INR: { name:'Indian Rupee',    flag:'🇮🇳', symbol:'₹',  rate:83.12   },
+  AED: { name:'UAE Dirham',      flag:'🇦🇪', symbol:'د.إ', rate:3.67   },
+  SAR: { name:'Saudi Riyal',     flag:'🇸🇦', symbol:'﷼',  rate:3.75    },
+  JPY: { name:'Japanese Yen',    flag:'🇯🇵', symbol:'¥',  rate:149.50  },
+  CNY: { name:'Chinese Yuan',    flag:'🇨🇳', symbol:'¥',  rate:7.24    },
+  CAD: { name:'Canadian Dollar', flag:'🇨🇦', symbol:'C$', rate:1.36    },
+  AUD: { name:'Australian Dollar',flag:'🇦🇺',symbol:'A$', rate:1.53    },
+  CHF: { name:'Swiss Franc',     flag:'🇨🇭', symbol:'Fr', rate:0.91    },
+  TRY: { name:'Turkish Lira',    flag:'🇹🇷', symbol:'₺',  rate:30.80   },
+  MYR: { name:'Malaysian Ringgit',flag:'🇲🇾',symbol:'RM', rate:4.65    },
+  SGD: { name:'Singapore Dollar',flag:'🇸🇬', symbol:'S$', rate:1.34    },
+  KWD: { name:'Kuwaiti Dinar',   flag:'🇰🇼', symbol:'د.ك', rate:0.308  },
+  BHD: { name:'Bahraini Dinar',  flag:'🇧🇭', symbol:'BD', rate:0.376   },
+  BTC: { name:'Bitcoin',         flag:'₿',    symbol:'₿',  rate:0.0000238},
 };
 
 const POPULAR_PAIRS = [
@@ -323,54 +360,108 @@ const POPULAR_PAIRS = [
 ];
 
 function initCurrency() {
-  const fromSel   = document.getElementById('from-currency');
-  const toSel     = document.getElementById('to-currency');
-  const amtFrom   = document.getElementById('amount-from');
-  const amtTo     = document.getElementById('amount-to');
-  const flagFrom  = document.getElementById('flag-from');
-  const flagTo    = document.getElementById('flag-to');
-  const rateText  = document.getElementById('rate-text');
-  const pairGrid  = document.getElementById('pair-grid');
-  const rateStatus= document.getElementById('rate-status');
-  const refreshBtn= document.getElementById('refresh-rates');
+  const amtFrom    = document.getElementById('amount-from');
+  const amtTo      = document.getElementById('amount-to');
+  const flagFrom   = document.getElementById('flag-from');
+  const flagTo     = document.getElementById('flag-to');
+  const rateText   = document.getElementById('rate-text');
+  const pairGrid   = document.getElementById('pair-grid');
+  const rateStatus = document.getElementById('rate-status');
+  const refreshBtn = document.getElementById('refresh-rates');
 
-  // Populate selects
-  Object.entries(CURRENCIES).forEach(([code, info]) => {
-    [fromSel, toSel].forEach(sel => {
-      const opt = document.createElement('option');
-      opt.value       = code;
-      opt.textContent = `${code} — ${info.name}`;
-      sel.appendChild(opt);
+  // Custom dropdown elements
+  const ddFromBtn   = document.getElementById('dd-from-btn');
+  const ddFromPanel = document.getElementById('dd-from-panel');
+  const ddFromLabel = document.getElementById('dd-from-label');
+  const ddToBtn     = document.getElementById('dd-to-btn');
+  const ddToPanel   = document.getElementById('dd-to-panel');
+  const ddToLabel   = document.getElementById('dd-to-label');
+  const ddFrom      = document.getElementById('dd-from');
+  const ddTo        = document.getElementById('dd-to');
+
+  let fromCur = 'USD';
+  let toCur   = 'PKR';
+
+  // Build dropdown options
+  function buildDropdown(panel, selectedCode, onSelect) {
+    panel.innerHTML = '';
+    Object.entries(CURRENCIES).forEach(([code, info]) => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'cur-dd-item' + (code === selectedCode ? ' active' : '');
+      item.innerHTML = `<span class="cur-dd-item-flag">${info.symbol}</span>
+                         <span class="cur-dd-item-code">${code}</span>
+                         <span class="cur-dd-item-name">${info.name}</span>`;
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        onSelect(code);
+        panel.classList.remove('open');
+      });
+      panel.appendChild(item);
     });
-  });
-  fromSel.value = 'USD';
-  toSel.value   = 'PKR';
-
-  function convert() {
-    const from  = fromSel.value;
-    const to    = toSel.value;
-    const amt   = parseFloat(amtFrom.value) || 0;
-    const inUSD = amt / CURRENCIES[from].rate;
-    const res   = inUSD * CURRENCIES[to].rate;
-    amtTo.value = round(res, 4);
-    const one   = round(CURRENCIES[to].rate / CURRENCIES[from].rate, 4);
-    rateText.textContent = `1 ${from} = ${one} ${to}`;
-    flagFrom.textContent = CURRENCIES[from].flag;
-    flagTo.textContent   = CURRENCIES[to].flag;
   }
 
-  fromSel.addEventListener('change', convert);
-  toSel.addEventListener('change', convert);
+  function updateFromDropdown() {
+    ddFromLabel.textContent = `${fromCur} — ${CURRENCIES[fromCur].name}`;
+    buildDropdown(ddFromPanel, fromCur, (code) => {
+      fromCur = code;
+      updateFromDropdown();
+      convert();
+    });
+  }
+
+  function updateToDropdown() {
+    ddToLabel.textContent = `${toCur} — ${CURRENCIES[toCur].name}`;
+    buildDropdown(ddToPanel, toCur, (code) => {
+      toCur = code;
+      updateToDropdown();
+      convert();
+    });
+  }
+
+  // Toggle dropdowns
+  ddFromBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    ddToPanel.classList.remove('open');
+    ddFromPanel.classList.toggle('open');
+  });
+  ddToBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    ddFromPanel.classList.remove('open');
+    ddToPanel.classList.toggle('open');
+  });
+
+  // Close on outside click
+  document.addEventListener('click', () => {
+    ddFromPanel.classList.remove('open');
+    ddToPanel.classList.remove('open');
+  });
+  ddFromPanel.addEventListener('click', e => e.stopPropagation());
+  ddToPanel.addEventListener('click', e => e.stopPropagation());
+
+  function convert() {
+    const amt   = parseFloat(amtFrom.value) || 0;
+    const inUSD = amt / CURRENCIES[fromCur].rate;
+    const res   = inUSD * CURRENCIES[toCur].rate;
+    amtTo.value = round(res, 2);
+    const one   = round(CURRENCIES[toCur].rate / CURRENCIES[fromCur].rate, 2);
+    rateText.textContent = `1 ${fromCur} = ${one} ${toCur}`;
+    flagFrom.textContent = CURRENCIES[fromCur].flag;
+    flagTo.textContent   = CURRENCIES[toCur].flag;
+  }
+
   amtFrom.addEventListener('input', convert);
 
   document.getElementById('swap-currency').addEventListener('click', () => {
-    [fromSel.value, toSel.value] = [toSel.value, fromSel.value];
+    [fromCur, toCur] = [toCur, fromCur];
+    updateFromDropdown();
+    updateToDropdown();
     convert();
   });
 
   refreshBtn.addEventListener('click', async () => {
-    rateStatus.textContent = 'Fetching live rates...';
-    refreshBtn.textContent = '↻ Loading...';
+    rateStatus.textContent = t('currency.fetchingRates');
+    refreshBtn.textContent = t('currency.loading');
     try {
       const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
       if (res.ok) {
@@ -378,14 +469,14 @@ function initCurrency() {
         Object.keys(CURRENCIES).forEach(code => {
           if (data.rates[code]) CURRENCIES[code].rate = data.rates[code];
         });
-        rateStatus.textContent = `Live rates ✓ — Updated ${new Date().toLocaleTimeString()}`;
+        rateStatus.textContent = t('currency.liveRates').replace('{time}', new Date().toLocaleTimeString());
         convert();
         buildPairs();
       } else { throw new Error(); }
     } catch {
-      rateStatus.textContent = 'Live rates unavailable — using reference rates';
+      rateStatus.textContent = t('currency.liveUnavailable');
     }
-    refreshBtn.textContent = '↻ Refresh';
+    refreshBtn.textContent = t('currency.refresh');
   });
 
   function buildPairs() {
@@ -397,12 +488,25 @@ function initCurrency() {
       chip.innerHTML = `<div class="pair-name">${CURRENCIES[f].flag} ${f} → ${t} ${CURRENCIES[t].flag}</div>
                         <div class="pair-rate">1 ${f} = ${rate} ${t}</div>`;
       chip.addEventListener('click', () => {
-        fromSel.value = f; toSel.value = t; amtFrom.value = 1; convert();
+        fromCur = f; toCur = t; amtFrom.value = 1;
+        updateFromDropdown();
+        updateToDropdown();
+        convert();
       });
       pairGrid.appendChild(chip);
     });
   }
 
+  // Toggle popular pairs
+  const pairsToggle = document.getElementById('pairs-toggle');
+  const pairsCollapsible = document.getElementById('pairs-collapsible');
+  pairsToggle.addEventListener('click', () => {
+    const isOpen = pairsCollapsible.classList.toggle('open');
+    pairsToggle.textContent = isOpen ? t('currency.hidePairs') : t('currency.showPairs');
+  });
+
+  updateFromDropdown();
+  updateToDropdown();
   buildPairs();
   convert();
 }
@@ -468,45 +572,100 @@ function convertTemp(val, from, to) {
 }
 
 function initUnit() {
-  const catBtns  = document.querySelectorAll('.unit-cat');
-  const fromSel  = document.getElementById('unit-from');
-  const toSel    = document.getElementById('unit-to');
-  const inputFrom= document.getElementById('unit-input-from');
-  const inputTo  = document.getElementById('unit-input-to');
-  const formula  = document.getElementById('unit-formula');
+  const catBtns   = document.querySelectorAll('.unit-cat');
+  const inputFrom = document.getElementById('unit-input-from');
+  const inputTo   = document.getElementById('unit-input-to');
+  const formula   = document.getElementById('unit-formula');
+
+  // Custom dropdown elements
+  const uddFromBtn   = document.getElementById('udd-from-btn');
+  const uddFromPanel = document.getElementById('udd-from-panel');
+  const uddFromLabel = document.getElementById('udd-from-label');
+  const uddToBtn     = document.getElementById('udd-to-btn');
+  const uddToPanel   = document.getElementById('udd-to-panel');
+  const uddToLabel   = document.getElementById('udd-to-label');
 
   let currentCat = 'length';
+  let fromUnit   = 'Meter';
+  let toUnit     = 'Kilometer';
+
+  function buildUnitDropdown(panel, selectedUnit, onSelect) {
+    panel.innerHTML = '';
+    const units = Object.keys(UNITS[currentCat].units);
+    units.forEach(u => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'cur-dd-item' + (u === selectedUnit ? ' active' : '');
+      item.innerHTML = `<span class="cur-dd-item-code">${u}</span>`;
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        onSelect(u);
+        panel.classList.remove('open');
+      });
+      panel.appendChild(item);
+    });
+  }
+
+  function updateFromDD() {
+    uddFromLabel.textContent = fromUnit;
+    buildUnitDropdown(uddFromPanel, fromUnit, (u) => {
+      fromUnit = u;
+      updateFromDD();
+      convert();
+    });
+  }
+
+  function updateToDD() {
+    uddToLabel.textContent = toUnit;
+    buildUnitDropdown(uddToPanel, toUnit, (u) => {
+      toUnit = u;
+      updateToDD();
+      convert();
+    });
+  }
+
+  // Toggle dropdowns
+  uddFromBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    uddToPanel.classList.remove('open');
+    uddFromPanel.classList.toggle('open');
+  });
+  uddToBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    uddFromPanel.classList.remove('open');
+    uddToPanel.classList.toggle('open');
+  });
+
+  // Close on outside click
+  document.addEventListener('click', () => {
+    uddFromPanel.classList.remove('open');
+    uddToPanel.classList.remove('open');
+  });
+  uddFromPanel.addEventListener('click', e => e.stopPropagation());
+  uddToPanel.addEventListener('click', e => e.stopPropagation());
 
   function populateSelects(cat) {
-    [fromSel, toSel].forEach(sel => sel.innerHTML = '');
     const units = Object.keys(UNITS[cat].units);
-    units.forEach(u => {
-      [fromSel, toSel].forEach(sel => {
-        const o = document.createElement('option');
-        o.value = u; o.textContent = u;
-        sel.appendChild(o);
-      });
-    });
-    fromSel.value = units[0];
-    toSel.value   = units[1] || units[0];
+    fromUnit = units[0];
+    toUnit   = units[1] || units[0];
+    updateFromDD();
+    updateToDD();
   }
 
   function convert() {
-    const from = fromSel.value;
-    const to   = toSel.value;
-    const val  = parseFloat(inputFrom.value) || 0;
+    const val = parseFloat(inputFrom.value) || 0;
 
     if (currentCat === 'temp') {
-      inputTo.value = convertTemp(val, from, to);
-      formula.textContent = `${val} ${from} → ${inputTo.value} ${to}`;
+      inputTo.value = convertTemp(val, fromUnit, toUnit);
+      formula.textContent = `${val} ${fromUnit} → ${inputTo.value} ${toUnit}`;
       return;
     }
 
-    const fFrom = UNITS[currentCat].units[from].f;
-    const fTo   = UNITS[currentCat].units[to].f;
+    const fFrom = UNITS[currentCat].units[fromUnit].f;
+    const fTo   = UNITS[currentCat].units[toUnit].f;
     const base  = val / fFrom;
     inputTo.value = round(base * fTo, 6);
-    formula.textContent = `${val} ${from} = ${inputTo.value} ${to}`;
+    formula.textContent = `${val} ${fromUnit} = ${inputTo.value} ${toUnit}`;
   }
 
   catBtns.forEach(btn => {
@@ -520,12 +679,12 @@ function initUnit() {
     });
   });
 
-  fromSel.addEventListener('change', convert);
-  toSel.addEventListener('change', convert);
   inputFrom.addEventListener('input', convert);
 
   document.getElementById('swap-units').addEventListener('click', () => {
-    [fromSel.value, toSel.value] = [toSel.value, fromSel.value];
+    [fromUnit, toUnit] = [toUnit, fromUnit];
+    updateFromDD();
+    updateToDD();
     convert();
   });
 
@@ -538,7 +697,8 @@ function initUnit() {
 ═══════════════════════════════════════════════ */
 function round(n, decimals = 10) {
   if (n === 'Error' || isNaN(n)) return n;
-  return parseFloat(parseFloat(n).toPrecision(12));
+  const factor = Math.pow(10, decimals);
+  return Math.round(parseFloat(n) * factor) / factor;
 }
 
 function factorial(n) {
@@ -562,4 +722,35 @@ function addRipple(e) {
   `;
   btn.appendChild(r);
   r.addEventListener('animationend', () => r.remove());
+}
+
+function initLangToggle() {
+  const langBtn = document.getElementById('lang-toggle');
+  if (!langBtn) return;
+  langBtn.addEventListener('click', () => {
+    const nextLang = currentLang === 'en' ? 'ur' : 'en';
+    loadLanguage(nextLang);
+  });
+}
+
+function initThemeToggle() {
+  const themeBtn = document.getElementById('theme-toggle');
+  if (!themeBtn) return;
+  
+  // Load saved theme
+  const savedTheme = localStorage.getItem('novCalcTheme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeIcon(savedTheme);
+
+  themeBtn.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('novCalcTheme', newTheme);
+    updateThemeIcon(newTheme);
+  });
+
+  function updateThemeIcon(theme) {
+    themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
 }

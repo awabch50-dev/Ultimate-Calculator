@@ -1,40 +1,48 @@
-# 🧮 CALCULARTOR
+<div align="center">
 
-A modern and responsive calculator web application built with **HTML, CSS, and JavaScript**.
+🌐 **`اردو 🇵🇰`** &nbsp;|&nbsp; [English 🇬🇧](README.en.md)
 
-## 🚀 Live Demo
+</div>
+
+<div dir="rtl" align="right">
+
+# 🧮 کیلکولیٹر (CALCULARTOR)
+
+ایک جدید اور ریسپانسیو کیلکولیٹر ویب ایپلیکیشن جو **HTML، CSS اور JavaScript** سے بنائی گئی ہے۔
+
+## 🚀 لائیو ڈیمو
 
 🔗 https://awabch50-dev.github.io/CALCULARTOR/
 
 ---
 
-## 📌 About The Project
+## 📌 پروجیکٹ کے بارے میں
 
-CALCULARTOR is a simple and powerful web-based calculator designed to perform mathematical calculations quickly with a clean and responsive user interface.
-
----
-
-## ✨ Calculator Features
-
-✅ Basic arithmetic operations  
-➕ Addition  
-➖ Subtraction  
-✖️ Multiplication  
-➗ Division  
-
-✅ Decimal number calculations  
-✅ Clear (AC) button to reset calculations  
-✅ Delete / Backspace functionality  
-✅ Real-time display updates  
-✅ Error handling for invalid calculations  
-✅ Keyboard input support  
-✅ Responsive design for mobile and desktop  
-✅ Fast and smooth user experience  
-✅ Clean calculator UI
+CALCULARTOR ایک سادہ اور طاقتور ویب پر مبنی کیلکولیٹر ہے جو صاف اور ریسپانسیو یوزر انٹرفیس کے ساتھ ریاضیاتی حسابات کو تیزی سے انجام دینے کے لیے ڈیزائن کیا گیا ہے۔
 
 ---
 
-## 🛠️ Technologies Used
+## ✨ کیلکولیٹر کی خصوصیات
+
+✅ بنیادی ریاضیاتی آپریشنز  
+➕ جمع  
+➖ تفریق  
+✖️ ضرب  
+➗ تقسیم  
+
+✅ اعشاریہ نمبر کے حسابات  
+✅ حسابات کو ری سیٹ کرنے کے لیے کلیئر (AC) بٹن  
+✅ ڈیلیٹ / بیک سپیس کی فعالیت  
+✅ ریئل ٹائم ڈسپلے اپ ڈیٹس  
+✅ غلط حسابات کے لیے ایرر ہینڈلنگ  
+✅ کی بورڈ ان پٹ سپورٹ  
+✅ موبائل اور ڈیسک ٹاپ کے لیے ریسپانسیو ڈیزائن  
+✅ تیز اور ہموار صارف تجربہ  
+✅ صاف کیلکولیٹر UI
+
+---
+
+## 🛠️ استعمال شدہ ٹیکنالوجیز
 
 - HTML5
 - CSS3
@@ -42,28 +50,30 @@ CALCULARTOR is a simple and powerful web-based calculator designed to perform ma
 
 ---
 
-## 📂 Project Structure
+## 📂 پروجیکٹ کا ڈھانچہ
 
 ---
 
-## ⚙️ How To Use
+## ⚙️ استعمال کا طریقہ
 
-1. Enter numbers using buttons or keyboard
-2. Select any mathematical operation
-3. Press `=` to get the result
-4. Use `AC` to clear the calculator
+1. بٹنز یا کی بورڈ استعمال کر کے نمبرز درج کریں
+2. کوئی بھی ریاضیاتی آپریشن منتخب کریں
+3. نتیجہ حاصل کرنے کے لیے `=` دبائیں
+4. کیلکولیٹر صاف کرنے کے لیے `AC` استعمال کریں
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 مصنف
 
-**AWAB AHMAD**
+**اواب احمد (AWAB AHMAD)**
 
 GitHub:
 https://github.com/awabch50-dev
 
 ---
 
-⭐ If you like this calculator, don't forget to star the repository.
+⭐ اگر آپ کو یہ کیلکولیٹر پسند آیا تو ریپوزٹری کو سٹار دینا نہ بھولیں۔
 
-Made with ❤️ using HTML, CSS & JavaScript
+❤️ HTML، CSS اور JavaScript کے ساتھ محبت سے بنایا گیا
+
+</div>
