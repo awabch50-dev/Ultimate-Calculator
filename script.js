@@ -407,6 +407,7 @@ function initCurrency() {
       fromCur = code;
       updateFromDropdown();
       convert();
+      fetchLiveRates(); // Fetch dynamic rates when base changes
     });
   }
 
@@ -416,6 +417,7 @@ function initCurrency() {
       toCur = code;
       updateToDropdown();
       convert();
+      // No need to fetchLiveRates here because base currency (fromCur) didn't change
     });
   }
 
@@ -443,8 +445,10 @@ function initCurrency() {
     const amt   = parseFloat(amtFrom.value) || 0;
     const inUSD = amt / CURRENCIES[fromCur].rate;
     const res   = inUSD * CURRENCIES[toCur].rate;
-    amtTo.value = round(res, 2);
-    const one   = round(CURRENCIES[toCur].rate / CURRENCIES[fromCur].rate, 2);
+    
+    // Smart precision: 2 decimals for large fiats, up to 6 for cryptos/small fiats
+    amtTo.value = parseFloat(res.toFixed(6));
+    const one   = parseFloat((CURRENCIES[toCur].rate / CURRENCIES[fromCur].rate).toFixed(6));
     rateText.textContent = `1 ${fromCur} = ${one} ${toCur}`;
     flagFrom.textContent = CURRENCIES[fromCur].flag;
     flagTo.textContent   = CURRENCIES[toCur].flag;
@@ -457,19 +461,23 @@ function initCurrency() {
     updateFromDropdown();
     updateToDropdown();
     convert();
+    fetchLiveRates(); // Fetch dynamically for new base
   });
 
-  refreshBtn.addEventListener('click', async () => {
+  async function fetchLiveRates() {
     rateStatus.textContent = t('currency.fetchingRates');
     refreshBtn.textContent = t('currency.loading');
     try {
-      const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      // Dynamically fetch rates strictly relative to the selected base currency
+      const res = await fetch(`https://api.coinbase.com/v2/exchange-rates?currency=${fromCur}`);
       if (res.ok) {
-        const data = await res.json();
+        const payload = await res.json();
+        const data = payload.data;
         Object.keys(CURRENCIES).forEach(code => {
-          if (data.rates[code]) CURRENCIES[code].rate = data.rates[code];
+          if (data.rates[code]) CURRENCIES[code].rate = parseFloat(data.rates[code]);
         });
-        rateStatus.textContent = t('currency.liveRates').replace('{time}', new Date().toLocaleTimeString());
+        // Force 'en-US' locale to keep numericals strictly in English
+        rateStatus.textContent = t('currency.liveRates').replace('{time}', new Date().toLocaleTimeString('en-US'));
         convert();
         buildPairs();
       } else { throw new Error(); }
@@ -477,7 +485,12 @@ function initCurrency() {
       rateStatus.textContent = t('currency.liveUnavailable');
     }
     refreshBtn.textContent = t('currency.refresh');
-  });
+  }
+
+  refreshBtn.addEventListener('click', fetchLiveRates);
+
+  // Automatically fetch real-time rates when initializing
+  fetchLiveRates();
 
   function buildPairs() {
     pairGrid.innerHTML = '';
@@ -509,6 +522,15 @@ function initCurrency() {
   updateToDropdown();
   buildPairs();
   convert();
+}
+
+/* ── PWA SERVICE WORKER ───────────────────────── */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => {
+      console.error('ServiceWorker registration failed: ', err);
+    });
+  });
 }
 
 /* ════════════════════════════════════════════════

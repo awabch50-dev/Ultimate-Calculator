@@ -111,10 +111,9 @@ html, body {
   gap: 8px;
 }
 .logo-icon {
-  font-size: 22px;
-  background: var(--eq-grad);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
   animation: glowPulse 3s infinite ease-in-out;
 }
 @keyframes glowPulse {
