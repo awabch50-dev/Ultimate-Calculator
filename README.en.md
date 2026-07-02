@@ -4,19 +4,19 @@
 
 </div>
 
-# 🧮 CALCULARTOR
+# 🧮 ULTIMATE-CALCULATOR
 
 A modern and responsive calculator web application built with **HTML, CSS, and JavaScript**.
 
 ## 🚀 Live Demo
 
-🔗 https://awabch50-dev.github.io/CALCULARTOR/
+🔗 https://awabch50-dev.github.io/CALCULATOR/
 
 ---
 
 ## 📌 About The Project
 
-CALCULARTOR is a simple and powerful web-based calculator designed to perform mathematical calculations quickly with a clean and responsive user interface.
+ULTIMATE-CALCULATOR is a simple and powerful web-based calculator designed to perform mathematical calculations quickly with a clean and responsive user interface.
 
 ---
 
