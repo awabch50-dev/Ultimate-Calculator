@@ -1,166 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NovCalc — Advanced Calculator</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovCalc — Advanced Calculator | Currency & Unit Converter</title>
+  <meta name="description" content="NovCalc is a modern advanced calculator with standard, scientific, currency converter with live rates, and unit converter modes. Supports English and Urdu." />
+  <meta name="keywords" content="calculator, scientific calculator, currency converter, unit converter, NovCalc, PKR, USD" />
+  <meta name="author" content="Awab Ahmad" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="NovCalc — Advanced Calculator" />
+  <meta property="og:description" content="Modern calculator with standard, scientific, currency & unit converter modes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/icons/logo-512.png" />
+
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/png" href="assets/icons/logo-512.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/logo-512.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/logo-192.png" />
   <link rel="apple-touch-icon" href="assets/icons/logo-512.png" />
   <meta name="theme-color" content="#7c6bff" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- Background orbs -->
-  <div class="bg-orb orb1"></div>
-  <div class="bg-orb orb2"></div>
-  <div class="bg-orb orb3"></div>
+  <noscript>
+    <div style="text-align:center;padding:40px;font-family:sans-serif;color:#eef0ff;background:#0b0d17;min-height:100vh;display:flex;align-items:center;justify-content:center;">
+      <p>NovCalc requires JavaScript to run. Please enable JavaScript in your browser settings.</p>
+    </div>
+  </noscript>
 
-  <div class="app-wrapper">
+  <!-- Background orbs -->
+  <div class="bg-orb orb1" aria-hidden="true"></div>
+  <div class="bg-orb orb2" aria-hidden="true"></div>
+  <div class="bg-orb orb3" aria-hidden="true"></div>
+
+  <div class="app-wrapper" role="main">
 
     <!-- Header -->
     <header class="app-header">
       <div class="header-top">
         <div class="logo">
-          <img src="assets/icons/logo-192.png" alt="NovCalc Logo" class="logo-icon" />
+          <img src="assets/icons/logo-192.png" alt="NovCalc Logo" class="logo-icon" width="24" height="24" />
           <span class="logo-text">NovCalc</span>
         </div>
         <div class="header-controls">
-          <button class="theme-btn" id="theme-toggle" title="Toggle Theme">☀️</button>
-          <button class="lang-btn" id="lang-toggle" title="Switch Language">اردو</button>
+          <button class="theme-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle Theme">☀️</button>
+          <button class="lang-btn" id="lang-toggle" aria-label="Switch language" title="Switch Language">اردو</button>
         </div>
       </div>
-      <div class="mode-tabs">
+      <nav class="mode-tabs" aria-label="Calculator modes">
         <button class="mode-tab active" data-mode="standard" data-i18n="tab.standard">Standard</button>
         <button class="mode-tab" data-mode="scientific" data-i18n="tab.scientific">Scientific</button>
         <button class="mode-tab" data-mode="currency" data-i18n="tab.currency">Currency</button>
         <button class="mode-tab" data-mode="unit" data-i18n="tab.unit">Unit</button>
-      </div>
+      </nav>
     </header>
 
     <!-- STANDARD CALCULATOR -->
-    <div class="calc-panel active" id="standard">
+    <section class="calc-panel active" id="standard" aria-label="Standard Calculator">
       <div class="display-wrap">
-        <div class="expression" id="std-expr"></div>
-        <div class="result" id="std-result">0</div>
-        <div class="result-hint" id="std-hint"></div>
+        <div class="expression" id="std-expr" aria-live="polite"></div>
+        <div class="result" id="std-result" aria-live="assertive" role="status">0</div>
+        <div class="result-hint" id="std-hint" aria-live="polite"></div>
       </div>
-      <div class="history-strip" id="std-history"></div>
-      <div class="keypad">
+      <div class="history-strip" id="std-history" aria-label="Calculation history"></div>
+      <div class="keypad" role="group" aria-label="Standard keypad">
         <!-- Row 1 -->
-        <button class="key key-fn" data-action="clear">AC</button>
-        <button class="key key-fn" data-action="sign">±</button>
-        <button class="key key-fn" data-action="percent">%</button>
-        <button class="key key-op" data-op="÷">÷</button>
+        <button class="key key-fn" data-action="clear" aria-label="Clear all">AC</button>
+        <button class="key key-fn" data-action="sign" aria-label="Toggle sign">±</button>
+        <button class="key key-fn" data-action="percent" aria-label="Percent">%</button>
+        <button class="key key-op" data-op="÷" aria-label="Divide">÷</button>
         <!-- Row 2 -->
         <button class="key key-num" data-num="7">7</button>
         <button class="key key-num" data-num="8">8</button>
         <button class="key key-num" data-num="9">9</button>
-        <button class="key key-op" data-op="×">×</button>
+        <button class="key key-op" data-op="×" aria-label="Multiply">×</button>
         <!-- Row 3 -->
         <button class="key key-num" data-num="4">4</button>
         <button class="key key-num" data-num="5">5</button>
         <button class="key key-num" data-num="6">6</button>
-        <button class="key key-op" data-op="−">−</button>
+        <button class="key key-op" data-op="−" aria-label="Subtract">−</button>
         <!-- Row 4 -->
         <button class="key key-num" data-num="1">1</button>
         <button class="key key-num" data-num="2">2</button>
         <button class="key key-num" data-num="3">3</button>
-        <button class="key key-op" data-op="+">+</button>
+        <button class="key key-op" data-op="+" aria-label="Add">+</button>
         <!-- Row 5 -->
         <button class="key key-num key-zero" data-num="0">0</button>
-        <button class="key key-num" data-action="decimal">.</button>
-        <button class="key key-eq" data-action="equals">=</button>
+        <button class="key key-num" data-action="decimal" aria-label="Decimal point">.</button>
+        <button class="key key-eq" data-action="equals" aria-label="Equals">=</button>
       </div>
-    </div>
+    </section>
 
     <!-- SCIENTIFIC CALCULATOR -->
-    <div class="calc-panel" id="scientific">
+    <section class="calc-panel" id="scientific" aria-label="Scientific Calculator">
       <div class="display-wrap">
-        <div class="expression" id="sci-expr"></div>
-        <div class="result" id="sci-result">0</div>
-        <div class="result-hint" id="sci-hint"></div>
+        <div class="expression" id="sci-expr" aria-live="polite"></div>
+        <div class="result" id="sci-result" aria-live="assertive" role="status">0</div>
+        <div class="result-hint" id="sci-hint" aria-live="polite"></div>
       </div>
-      <div class="history-strip" id="sci-history"></div>
-      <div class="keypad keypad-sci">
+      <div class="history-strip" id="sci-history" aria-label="Calculation history"></div>
+      <div class="keypad keypad-sci" role="group" aria-label="Scientific keypad">
         <!-- Row 1: Function keys -->
-        <button class="key key-sci" data-sci="sin">sin</button>
-        <button class="key key-sci" data-sci="cos">cos</button>
-        <button class="key key-sci" data-sci="tan">tan</button>
-        <button class="key key-sci" data-sci="log">log</button>
-        <button class="key key-sci" data-sci="ln">ln</button>
+        <button class="key key-sci" data-sci="sin" aria-label="Sine">sin</button>
+        <button class="key key-sci" data-sci="cos" aria-label="Cosine">cos</button>
+        <button class="key key-sci" data-sci="tan" aria-label="Tangent">tan</button>
+        <button class="key key-sci" data-sci="log" aria-label="Logarithm base 10">log</button>
+        <button class="key key-sci" data-sci="ln" aria-label="Natural logarithm">ln</button>
         <!-- Row 2 -->
-        <button class="key key-sci" data-sci="sqrt">√</button>
-        <button class="key key-sci" data-sci="sq">x²</button>
-        <button class="key key-sci" data-sci="pow">xʸ</button>
-        <button class="key key-sci" data-sci="pi">π</button>
-        <button class="key key-sci" data-sci="e">e</button>
+        <button class="key key-sci" data-sci="sqrt" aria-label="Square root">√</button>
+        <button class="key key-sci" data-sci="sq" aria-label="Square">x²</button>
+        <button class="key key-sci" data-sci="pow" aria-label="Power">xʸ</button>
+        <button class="key key-sci" data-sci="pi" aria-label="Pi constant">π</button>
+        <button class="key key-sci" data-sci="e" aria-label="Euler number">e</button>
         <!-- Row 3 -->
-        <button class="key key-sci" data-sci="abs">|x|</button>
-        <button class="key key-sci" data-sci="inv">1/x</button>
-        <button class="key key-sci" data-sci="fact">n!</button>
-        <button class="key key-fn" data-action="clear">AC</button>
-        <button class="key key-fn" data-action="backspace">⌫</button>
+        <button class="key key-sci" data-sci="abs" aria-label="Absolute value">|x|</button>
+        <button class="key key-sci" data-sci="inv" aria-label="Reciprocal">1/x</button>
+        <button class="key key-sci" data-sci="fact" aria-label="Factorial">n!</button>
+        <button class="key key-fn" data-action="clear" aria-label="Clear all">AC</button>
+        <button class="key key-fn" data-action="backspace" aria-label="Backspace">⌫</button>
         <!-- Row 4 -->
         <button class="key key-num" data-num="7">7</button>
         <button class="key key-num" data-num="8">8</button>
         <button class="key key-num" data-num="9">9</button>
-        <button class="key key-op" data-op="÷">÷</button>
-        <button class="key key-op" data-op="×">×</button>
+        <button class="key key-op" data-op="÷" aria-label="Divide">÷</button>
+        <button class="key key-op" data-op="×" aria-label="Multiply">×</button>
         <!-- Row 5 -->
         <button class="key key-num" data-num="4">4</button>
         <button class="key key-num" data-num="5">5</button>
         <button class="key key-num" data-num="6">6</button>
-        <button class="key key-op" data-op="+">+</button>
-        <button class="key key-op" data-op="−">−</button>
+        <button class="key key-op" data-op="+" aria-label="Add">+</button>
+        <button class="key key-op" data-op="−" aria-label="Subtract">−</button>
         <!-- Row 6 -->
         <button class="key key-num" data-num="1">1</button>
         <button class="key key-num" data-num="2">2</button>
         <button class="key key-num" data-num="3">3</button>
         <button class="key key-num" data-num="0">0</button>
-        <button class="key key-eq" data-action="equals">=</button>
+        <button class="key key-eq" data-action="equals" aria-label="Equals">=</button>
       </div>
-    </div>
+    </section>
 
     <!-- CURRENCY CONVERTER -->
-    <div class="calc-panel" id="currency">
+    <section class="calc-panel" id="currency" aria-label="Currency Converter">
       <div class="currency-header">
         <h2 data-i18n="currency.title">Currency Converter</h2>
         <button class="refresh-btn" id="refresh-rates" title="Refresh rates" data-i18n="currency.refresh">↻ Refresh</button>
       </div>
-      <div class="rate-status" id="rate-status" data-i18n="currency.status">Using built-in reference rates</div>
+      <div class="rate-status" id="rate-status" aria-live="polite" data-i18n="currency.status">Using built-in reference rates</div>
 
       <div class="currency-box">
         <div class="currency-row">
           <div class="currency-select-wrap">
-            <span class="flag" id="flag-from">🇺🇸</span>
+            <span class="flag" id="flag-from" aria-hidden="true">🇺🇸</span>
             <div class="cur-dropdown" id="dd-from">
-              <button class="cur-dd-btn" type="button" id="dd-from-btn">
+              <button class="cur-dd-btn" type="button" id="dd-from-btn" aria-haspopup="listbox" aria-expanded="false">
                 <span id="dd-from-label">USD — US Dollar</span>
-                <span class="cur-dd-chevron">▾</span>
+                <span class="cur-dd-chevron" aria-hidden="true">▾</span>
               </button>
-              <div class="cur-dd-panel" id="dd-from-panel"></div>
+              <div class="cur-dd-panel" id="dd-from-panel" role="listbox"></div>
             </div>
           </div>
-          <input type="number" id="amount-from" class="currency-input" placeholder="0.00" value="1"/>
+          <label for="amount-from" class="sr-only">Amount from</label>
+          <input type="number" id="amount-from" class="currency-input" placeholder="0.00" value="1" inputmode="decimal" />
         </div>
 
-        <button class="swap-btn" id="swap-currency" data-i18n="currency.swap">⇅ Swap</button>
+        <button class="swap-btn" id="swap-currency" aria-label="Swap currencies" data-i18n="currency.swap">⇅ Swap</button>
 
         <div class="currency-row">
           <div class="currency-select-wrap">
-            <span class="flag" id="flag-to">🇵🇰</span>
+            <span class="flag" id="flag-to" aria-hidden="true">🇵🇰</span>
             <div class="cur-dropdown" id="dd-to">
-              <button class="cur-dd-btn" type="button" id="dd-to-btn">
+              <button class="cur-dd-btn" type="button" id="dd-to-btn" aria-haspopup="listbox" aria-expanded="false">
                 <span id="dd-to-label">PKR — Pakistani Rupee</span>
-                <span class="cur-dd-chevron">▾</span>
+                <span class="cur-dd-chevron" aria-hidden="true">▾</span>
               </button>
-              <div class="cur-dd-panel" id="dd-to-panel"></div>
+              <div class="cur-dd-panel" id="dd-to-panel" role="listbox"></div>
             </div>
           </div>
-          <input type="number" id="amount-to" class="currency-input" placeholder="0.00" readonly/>
+          <label for="amount-to" class="sr-only">Amount to</label>
+          <input type="number" id="amount-to" class="currency-input" placeholder="0.00" readonly />
         </div>
       </div>
 
@@ -169,20 +196,20 @@
       </div>
 
       <div class="popular-pairs">
-        <button class="pairs-toggle-btn" id="pairs-toggle" data-i18n="currency.showPairs">Show Suggested Pairs</button>
+        <button class="pairs-toggle-btn" id="pairs-toggle" aria-expanded="false" data-i18n="currency.showPairs">Show Suggested Pairs</button>
         <div class="pairs-collapsible" id="pairs-collapsible">
           <p class="pair-label" data-i18n="currency.popularPairs">Popular Pairs</p>
           <div class="pair-grid" id="pair-grid"></div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- UNIT CONVERTER -->
-    <div class="calc-panel" id="unit">
+    <section class="calc-panel" id="unit" aria-label="Unit Converter">
       <div class="unit-header">
         <h2 data-i18n="unit.title">Unit Converter</h2>
       </div>
-      <div class="unit-category-wrap">
+      <div class="unit-category-wrap" role="group" aria-label="Unit categories">
         <button class="unit-cat active" data-cat="length" data-i18n="unit.length">📏 Length</button>
         <button class="unit-cat" data-cat="weight" data-i18n="unit.weight">⚖️ Weight</button>
         <button class="unit-cat" data-cat="temp" data-i18n="unit.temp">🌡️ Temp</button>
@@ -193,28 +220,30 @@
       <div class="unit-converter-box">
         <div class="unit-row">
           <div class="cur-dropdown" id="udd-from">
-            <button class="cur-dd-btn" type="button" id="udd-from-btn">
+            <button class="cur-dd-btn" type="button" id="udd-from-btn" aria-haspopup="listbox" aria-expanded="false">
               <span id="udd-from-label">Meter</span>
-              <span class="cur-dd-chevron">▾</span>
+              <span class="cur-dd-chevron" aria-hidden="true">▾</span>
             </button>
-            <div class="cur-dd-panel" id="udd-from-panel"></div>
+            <div class="cur-dd-panel" id="udd-from-panel" role="listbox"></div>
           </div>
-          <input type="number" id="unit-input-from" class="unit-input" placeholder="0" value="1"/>
+          <label for="unit-input-from" class="sr-only">Value from</label>
+          <input type="number" id="unit-input-from" class="unit-input" placeholder="0" value="1" inputmode="decimal" />
         </div>
-        <button class="swap-btn" id="swap-units" data-i18n="unit.swap">⇅ Swap</button>
+        <button class="swap-btn" id="swap-units" aria-label="Swap units" data-i18n="unit.swap">⇅ Swap</button>
         <div class="unit-row">
           <div class="cur-dropdown" id="udd-to">
-            <button class="cur-dd-btn" type="button" id="udd-to-btn">
+            <button class="cur-dd-btn" type="button" id="udd-to-btn" aria-haspopup="listbox" aria-expanded="false">
               <span id="udd-to-label">Kilometer</span>
-              <span class="cur-dd-chevron">▾</span>
+              <span class="cur-dd-chevron" aria-hidden="true">▾</span>
             </button>
-            <div class="cur-dd-panel" id="udd-to-panel"></div>
+            <div class="cur-dd-panel" id="udd-to-panel" role="listbox"></div>
           </div>
-          <input type="number" id="unit-input-to" class="unit-input" placeholder="0" readonly/>
+          <label for="unit-input-to" class="sr-only">Value to</label>
+          <input type="number" id="unit-input-to" class="unit-input" placeholder="0" readonly />
         </div>
       </div>
-      <div class="unit-formula" id="unit-formula"></div>
-    </div>
+      <div class="unit-formula" id="unit-formula" aria-live="polite"></div>
+    </section>
 
   </div><!-- end app-wrapper -->
 

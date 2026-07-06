@@ -463,21 +463,17 @@ html, body {
   flex-shrink: 0;
 }
 
-.unit-select {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  background: transparent;
-  border: none;
-  color: var(--text);
-  cursor: pointer;
-  outline: none;
-  flex: 1;
-  min-width: 0;
-}
-.unit-select option {
-  background: #1a1c2e;
-  color: var(--text);
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 /* ===== CUSTOM CURRENCY DROPDOWN ===== */
