@@ -1,11 +1,16 @@
 {
-  "name": "NovCalc",
+  "name": "NovCalc — Advanced Calculator",
   "short_name": "NovCalc",
-  "description": "Advanced Calculator with Currency & Unit Converter",
+  "description": "Advanced Calculator with Scientific, Currency & Unit Converter",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0b0d17",
   "theme_color": "#7c6bff",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["utilities", "productivity"],
   "icons": [
     {
       "src": "./assets/icons/logo-192.png",

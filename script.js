@@ -230,7 +230,7 @@ function initScientific() {
   let prevVal   = null;
   let newInput  = true;
   let history   = [];
-  let pendingPow = false;
+
 
   function updateDisplay() {
     resultEl.textContent = current;
@@ -425,18 +425,24 @@ function initCurrency() {
   ddFromBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     ddToPanel.classList.remove('open');
+    ddToBtn.setAttribute('aria-expanded', 'false');
     ddFromPanel.classList.toggle('open');
+    ddFromBtn.setAttribute('aria-expanded', ddFromPanel.classList.contains('open'));
   });
   ddToBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     ddFromPanel.classList.remove('open');
+    ddFromBtn.setAttribute('aria-expanded', 'false');
     ddToPanel.classList.toggle('open');
+    ddToBtn.setAttribute('aria-expanded', ddToPanel.classList.contains('open'));
   });
 
   // Close on outside click
   document.addEventListener('click', () => {
     ddFromPanel.classList.remove('open');
     ddToPanel.classList.remove('open');
+    ddFromBtn.setAttribute('aria-expanded', 'false');
+    ddToBtn.setAttribute('aria-expanded', 'false');
   });
   ddFromPanel.addEventListener('click', e => e.stopPropagation());
   ddToPanel.addEventListener('click', e => e.stopPropagation());
@@ -516,6 +522,7 @@ function initCurrency() {
   pairsToggle.addEventListener('click', () => {
     const isOpen = pairsCollapsible.classList.toggle('open');
     pairsToggle.textContent = isOpen ? t('currency.hidePairs') : t('currency.showPairs');
+    pairsToggle.setAttribute('aria-expanded', isOpen);
   });
 
   updateFromDropdown();
@@ -650,18 +657,24 @@ function initUnit() {
   uddFromBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     uddToPanel.classList.remove('open');
+    uddToBtn.setAttribute('aria-expanded', 'false');
     uddFromPanel.classList.toggle('open');
+    uddFromBtn.setAttribute('aria-expanded', uddFromPanel.classList.contains('open'));
   });
   uddToBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     uddFromPanel.classList.remove('open');
+    uddFromBtn.setAttribute('aria-expanded', 'false');
     uddToPanel.classList.toggle('open');
+    uddToBtn.setAttribute('aria-expanded', uddToPanel.classList.contains('open'));
   });
 
   // Close on outside click
   document.addEventListener('click', () => {
     uddFromPanel.classList.remove('open');
     uddToPanel.classList.remove('open');
+    uddFromBtn.setAttribute('aria-expanded', 'false');
+    uddToBtn.setAttribute('aria-expanded', 'false');
   });
   uddFromPanel.addEventListener('click', e => e.stopPropagation());
   uddToPanel.addEventListener('click', e => e.stopPropagation());
